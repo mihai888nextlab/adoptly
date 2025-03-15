@@ -56,7 +56,9 @@ export default function Sidebar({ name, description, logo, website, onFunctional
                 </div>
 
                 {/* Website Button */}
-                <div className="mt-6 text-center">
+                {
+                    website != '#' && (
+                        <div className="mt-6 text-center">
                     <a
                         href={website}
                         target="_blank"
@@ -66,6 +68,9 @@ export default function Sidebar({ name, description, logo, website, onFunctional
                         Visit Website
                     </a>
                 </div>
+                    )
+                }
+                
             </div>
 
             {/* "Doneaza" Button Section */}
