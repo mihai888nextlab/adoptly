@@ -12,7 +12,7 @@ export default async function handler(
     return res.status(405).json({ message: "Method Not Allowed" });
   }
 
-  const { name, email, password } = req.body;
+  const { name, email, password ,descriere} = req.body;
 
   if (!email || !password) {
     return res.status(400).json({ message: "Email and password are required" });
@@ -28,6 +28,7 @@ export default async function handler(
       password: hassedPassword,
       role: "shelter",
       activated: true,
+      descriere
     });
     await user.save();
 

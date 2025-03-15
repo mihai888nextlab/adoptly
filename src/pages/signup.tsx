@@ -19,9 +19,9 @@ export default function SignupPage() {
     const email = formData.get("email") as string;
     const password = formData.get("password") as string;
     const confirmPassword = formData.get("confirmPassword") as string;
-    //const ongCode = formData.get("ongCode") as string;
+    const descriere = formData.get("descriere") as string;
 
-    if (!name || !email || !password || !confirmPassword) {
+    if (!name || !email || !password || !confirmPassword || !descriere) {
       setError("Toate câmpurile sunt obligatorii.");
       return;
     }
@@ -42,16 +42,11 @@ export default function SignupPage() {
       return;
     }
 
-    // if (!/^[1-9]{4}\/[UFA]\/[1-9]{4}$/.test(ongCode)) {
-    //   setError("Codul ONG trebuie să fie în formatul XXXX/Y/XXXX, unde X este între 1-9, iar Y este U, F sau A.");
-    //   return;
-    // }
-
     setLoading(true);
     const response = await fetch("/api/signup", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name, email, password }),
+      body: JSON.stringify({ name, email, password, descriere }),
     });
 
     const data = await response.json();
@@ -63,8 +58,7 @@ export default function SignupPage() {
     } else {
       setError(data.message);
     }
-};
-
+  };
 
   const sendConfirmationEmail = (email: string) => {
     emailjs
@@ -133,6 +127,21 @@ export default function SignupPage() {
 
             <div>
               <label
+                htmlFor="descriere"
+                className="block text-sm font-medium text-gray-900"
+              >
+                Descriere
+              </label>
+              <textarea
+                name="descriere"
+                id="descriere"
+                required
+                className="block w-full rounded-md border-2 px-3 py-2 text-base text-gray-900 outline-none focus:ring-2 focus:ring-indigo-600"
+              ></textarea>
+            </div>
+
+            <div>
+              <label
                 htmlFor="password"
                 className="block text-sm font-medium text-gray-900"
               >
@@ -162,22 +171,6 @@ export default function SignupPage() {
                 className="block w-full rounded-md border-2 px-3 py-2 text-base text-gray-900 outline-none focus:ring-2 focus:ring-indigo-600"
               />
             </div>
-
-            {/* <div>
-              <label
-                htmlFor="ongCode"
-                className="block text-sm font-medium text-gray-900"
-              >
-                Cod ONG
-              </label>
-              <input
-                type="text"
-                name="ongCode"
-                id="ongCode"
-                required
-                className="block w-full rounded-md border-2 px-3 py-2 text-base text-gray-900 outline-none focus:ring-2 focus:ring-indigo-600"
-              />
-            </div> */}
 
             {error && (
               <p className="text-red-500 mt-4 font-semibold">{error}</p>

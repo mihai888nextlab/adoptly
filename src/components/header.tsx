@@ -21,12 +21,12 @@ const menu = [
     link: "/adopta",
   },
   {
-    name: "Doneaza",
-    link: "/doneaza",
-  },
-  {
     name: "Evenimente",
     link: "/evenimente",
+  },
+  {
+    name: "Doneaza",
+    link: "/doneaza",
   },
   {
     name: "Contact",

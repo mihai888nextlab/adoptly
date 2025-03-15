@@ -3,15 +3,13 @@ import { useState, useEffect } from "react";
 import Header from "@/components/header";
 import Footer from "@/components/footer";
 import Sidebar from "./sidebar";
-import { info } from "console";
 import FancyButton from "@/components/fancyButton";
-import { User } from "@/lib/models/user";
 import ClickedPet from "@/components/clickedPet";
 
 interface Shelter {
   _id: string;
   name: string;
-  description: string;
+  descriere: string;
   image?: string;
   website?: string;
 }
@@ -39,21 +37,10 @@ export default function OngDetails() {
 
   const [ongs, setOngs] = useState<Shelter[]>([]);
   const [selectedShelter, setSelectedShelter] = useState<Shelter | null>(null);
-  const [selectedFunctionality, setSelectedFunctionality] = useState<
-    string | null
-  >(null);
-  const [petsForThisShelter, setPetsForThisShelter] = useState<Pet[]>([]);
+  const [selectedFunctionality, setSelectedFunctionality] = useState<string | null>(null);
   const [pets, setPets] = useState<Pet[]>([]);
-  const [selectedPets, setSelectedPets] = useState<Pet | null>(null);
-
-
-  const handlePetClick = (pet: Pet) => {
-    setSelectedPets(pet);
-  };
-
-  const handleClosePopup = () =>{
-    setSelectedPets(null);
-  };
+  const [selectedPet, setSelectedPet] = useState<Pet | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     fetch("/api/getShelters")
@@ -72,14 +59,12 @@ export default function OngDetails() {
   useEffect(() => {
     fetch("/api/getPet")
       .then((response) => response.json())
-      .then((data: Pet[]) => setPets(data))
-      .catch((error) => console.error("Error fetching pets:", error));
+      .then((data: Pet[]) => setPets(Array.isArray(data) ? data : []))
+      .catch((error) => {
+        console.error("Error fetching pets:", error);
+        setError("Failed to load pets.");
+      });
   }, []);
-
-  useEffect(() => {
-    // const findPet = pets.find((element) => element.addedBy === selectedShelter);
-    // setPetsForThisShelter(findPet? [findPet]: []);
-  }, [petsForThisShelter]);
 
   if (!selectedShelter) {
     return (
@@ -96,39 +81,43 @@ export default function OngDetails() {
         {/* Sidebar with shelter details */}
         <Sidebar
           name={selectedShelter.name}
-          description={selectedShelter.description}
+          descriere={selectedShelter.descriere}
           logo={selectedShelter.image || "/default-logo.png"}
           website={selectedShelter.website || "#"}
-          onFunctionalitySelect={setSelectedFunctionality} // Pass the state updater
+          onFunctionalitySelect={setSelectedFunctionality}
         />
 
         {/* Main Content */}
         <div className="flex-1 p-8">
           <h1 className="text-4xl font-bold">{selectedShelter.name}</h1>
-          <p className="text-lg mt-4">{selectedShelter.description}</p>
+          {/* <p className="text-lg mt-4">{selectedShelter.descriere}</p> */}
 
           {/* Show content based on selected functionality */}
           {selectedFunctionality === "animals" && (
             <div className="mt-6 p-4 bg-gray-100 rounded-lg">
               <h2 className="text-2xl font-semibold">Animals Information</h2>
-              {pets.length === 0 && (<p>Momentan toate animalele au un camin</p>)}
+              {error && <p className="text-red-500">{error}</p>}
+              {pets.length === 0 && !error && <p>Momentan toate animalele au un cămin.</p>}
+
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 mt-5 lg:grid-cols-4 gap-6">
                 {pets
-                  .filter((pet) => pet.addedBy === id) // Filter only matching pets
+                  .filter((pet) => pet.addedBy === selectedShelter._id)
                   .map((pet) => (
-                    <div 
-                      onClick={()=>handlePetClick(pet)}                      
-                      className="flex flex-col items-center p-4 rounded-lg bg-white shadow-md transition-transform duration-300 hover:scale-105 hover:shadow-lg">
+                    <div
+                      key={pet.nume}
+                      onClick={() => setSelectedPet(pet)}
+                      className="flex flex-col items-center p-4 rounded-lg bg-white shadow-md transition-transform duration-300 hover:scale-105 hover:shadow-lg cursor-pointer"
+                    >
                       <img src={pet.image} alt={pet.nume} className="w-32 h-32 object-cover rounded-md" />
                       <div className="mt-2 text-center">
                         <h3 className="text-xl font-bold">Nume: {pet.nume}</h3>
-                        <p className="text-gray-600">Specie : {pet.specie}</p>
-                        <p className="text-gray-600">Varsta : {pet.varsta.ani} ani si {pet.varsta.luni} luni</p>
+                        <p className="text-gray-600">Specie: {pet.specie}</p>
+                        <p className="text-gray-600">Vârstă: {pet.varsta.ani} ani și {pet.varsta.luni} luni</p>
                       </div>
                     </div>
                   ))}
               </div>
-              {selectedPets != null && (<ClickedPet pet={selectedPets} onClose={()=>handleClosePopup()}/>)}
+              {selectedPet && <ClickedPet pet={selectedPet} onClose={() => setSelectedPet(null)} />}
             </div>
           )}
 
@@ -149,11 +138,10 @@ export default function OngDetails() {
                 posibilul să ajute comunitatea. Dar tu cum poți contribui?
               </p>
               <div className="mt-6 flex justify-center">
-              <a href="/donate" className="text-decoration-none">
-                <FancyButton text="Donează" />
-              </a>
-            </div>
-
+                <a href="/donate" className="text-decoration-none">
+                  <FancyButton text="Donează" />
+                </a>
+              </div>
             </div>
           )}
         </div>

@@ -3,13 +3,13 @@ import FancyButton from "@/components/fancyButton";
 
 interface Schedual {
     name: string;
-    description: string;
+    descriere: string;
     logo: string;
     website: string;
     onFunctionalitySelect: (selected: string | null) => void; // Callback for parent component
 }
 
-export default function Sidebar({ name, description, logo, website, onFunctionalitySelect }: Schedual) {
+export default function Sidebar({ name, descriere, logo, website, onFunctionalitySelect }: Schedual) {
     const [selectedFunctionality, setSelectedFunctionality] = useState<string | null>(null);
 
     const companyInfo = [
@@ -37,8 +37,8 @@ export default function Sidebar({ name, description, logo, website, onFunctional
                     <h1 className="text-xl font-bold">{name}</h1>
                 </div>
 
-                {/* Description */}
-                <p className="mt-2 text-sm text-gray-700 text-center">{description}</p>
+                {/* descriere */}
+                <p className="mt-2 text-sm text-gray-700 text-center">{descriere}</p>
 
                 {/* Functionality Buttons */}
                 <div className="mt-6 flex justify-center gap-2">
