@@ -29,10 +29,6 @@ const menu = [
     link: "/evenimente",
   },
   {
-    name: "AI",
-    link: "/ai",
-  },
-  {
     name: "Contact",
     link: "/contact",
   },

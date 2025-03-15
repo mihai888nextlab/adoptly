@@ -6,6 +6,7 @@ import Sidebar from "./sidebar";
 import { info } from "console";
 import FancyButton from "@/components/fancyButton";
 import { User } from "@/lib/models/user";
+import ClickedPet from "@/components/clickedPet";
 
 interface Shelter {
   _id: string;
@@ -43,6 +44,16 @@ export default function OngDetails() {
   >(null);
   const [petsForThisShelter, setPetsForThisShelter] = useState<Pet[]>([]);
   const [pets, setPets] = useState<Pet[]>([]);
+  const [selectedPets, setSelectedPets] = useState<Pet | null>(null);
+
+
+  const handlePetClick = (pet: Pet) => {
+    setSelectedPets(pet);
+  };
+
+  const handleClosePopup = () =>{
+    setSelectedPets(null);
+  };
 
   useEffect(() => {
     fetch("/api/getShelters")
@@ -105,8 +116,9 @@ export default function OngDetails() {
                 {pets
                   .filter((pet) => pet.addedBy === id) // Filter only matching pets
                   .map((pet) => (
-                    <div className="flex flex-col items-center p-4 rounded-lg bg-white shadow-md transition-transform duration-300 hover:scale-105 hover:shadow-lg"
->
+                    <div 
+                      onClick={()=>handlePetClick(pet)}                      
+                      className="flex flex-col items-center p-4 rounded-lg bg-white shadow-md transition-transform duration-300 hover:scale-105 hover:shadow-lg">
                       <img src={pet.image} alt={pet.nume} className="w-32 h-32 object-cover rounded-md" />
                       <div className="mt-2 text-center">
                         <h3 className="text-xl font-bold">Nume: {pet.nume}</h3>
@@ -116,7 +128,7 @@ export default function OngDetails() {
                     </div>
                   ))}
               </div>
-
+              {selectedPets != null && (<ClickedPet pet={selectedPets} onClose={()=>handleClosePopup()}/>)}
             </div>
           )}
 
@@ -136,11 +148,12 @@ export default function OngDetails() {
                 Aceasta este pagina de prezentare, iar echipa noastră face tot
                 posibilul să ajute comunitatea. Dar tu cum poți contribui?
               </p>
-              <div className="mt-6">
-                <a href="/donate">
-                  <FancyButton text="Donează" />
-                </a>
-              </div>
+              <div className="mt-6 flex justify-center">
+              <a href="/donate" className="text-decoration-none">
+                <FancyButton text="Donează" />
+              </a>
+            </div>
+
             </div>
           )}
         </div>

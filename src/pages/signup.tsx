@@ -36,8 +36,8 @@ export default function SignupPage() {
       return;
     }
 
-    if (!/^ONG-[0-9]{5}$/.test(ongCode)) {
-      setError("Codul ONG trebuie să fie în formatul ONG-XXXXX (5 cifre).");
+    if (!/^[1-9]{4}\/[UFA]\/[1-9]{4}$/.test(ongCode)) {
+      setError("Codul ONG trebuie să fie în formatul XXXX/Y/XXXX, unde X este între 1-9, iar Y este U, F sau A.");
       return;
     }
 
@@ -57,7 +57,8 @@ export default function SignupPage() {
     } else {
       setError(data.message);
     }
-  };
+};
+
 
   const sendConfirmationEmail = (email: string) => {
     emailjs
