@@ -59,9 +59,9 @@ export default function AppLayout({ children }: { children: ReactNode }) {
         <main className={font2.className + " w-full grid grid-cols-[20%_80%]"}>
           <menu className="z-20 flex flex-col items-center">
             <div className="w-[80%]">
-              <button className="bg-[#752CDF] w-full my-10 py-5 rounded-xl text-white font-semibold flex items-center justify-center">
+              {/* <button className="bg-[#752CDF] w-full my-10 py-5 rounded-xl text-white font-semibold flex items-center justify-center">
                 <FaPlus className="mr-5" /> Adauga un animal
-              </button>
+              </button> */}
               {menu.map((item) => (
                 <div
                   key={item.name}
