@@ -11,7 +11,7 @@ import { User } from "@/lib/models/user";
 interface Shelter {
     _id: string;  // Ensure _id is of type string
     name: string;
-    description: string;
+    descriere: string;
     website: string;
 }
 
@@ -44,7 +44,7 @@ export default function ONG() {
                                     <div className="w-full max-w-xs bg-secondary border border-transparent rounded-lg shadow-xl transform transition-transform hover:scale-105 hover:shadow-2xl p-8">
                                         <h2 className="text-3xl font-extrabold text-center text-white mb-6">{ong.name}</h2>
                                         <p className="text-center text-white opacity-80 mb-6 text-lg">
-                                            {ong.description}
+                                            {ong.descriere}
                                         </p>
                                         {ong.website && (
                                             <a
