@@ -29,7 +29,7 @@ export default function Sidebar({ name, description, logo, website, onFunctional
             <div>
                 {/* Logo */}
                 <div className="flex items-center justify-center">
-                    <img src={logo} alt={`${name} Logo`} className="w-40 h-40 rounded-full shadow-md" />
+                    <img src={"../placeholder_pfp.png"} alt={`${name} Logo`} className="w-40 h-40 rounded-full shadow-md" />
                 </div>
 
                 {/* Name */}

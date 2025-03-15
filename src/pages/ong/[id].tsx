@@ -100,7 +100,23 @@ export default function OngDetails() {
           {selectedFunctionality === "animals" && (
             <div className="mt-6 p-4 bg-gray-100 rounded-lg">
               <h2 className="text-2xl font-semibold">Animals Information</h2>
-              <p>Empty for now</p>
+              {pets.length === 0 && (<p>Momentan toate animalele au un camin</p>)}
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 mt-5 lg:grid-cols-4 gap-6">
+                {pets
+                  .filter((pet) => pet.addedBy === id) // Filter only matching pets
+                  .map((pet) => (
+                    <div className="flex flex-col items-center p-4 rounded-lg bg-white shadow-md transition-transform duration-300 hover:scale-105 hover:shadow-lg"
+>
+                      <img src={pet.image} alt={pet.nume} className="w-32 h-32 object-cover rounded-md" />
+                      <div className="mt-2 text-center">
+                        <h3 className="text-xl font-bold">Nume: {pet.nume}</h3>
+                        <p className="text-gray-600">Specie : {pet.specie}</p>
+                        <p className="text-gray-600">Varsta : {pet.varsta.ani} ani si {pet.varsta.luni} luni</p>
+                      </div>
+                    </div>
+                  ))}
+              </div>
+
             </div>
           )}
 
