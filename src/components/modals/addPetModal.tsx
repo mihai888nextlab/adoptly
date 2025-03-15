@@ -3,8 +3,10 @@ import { useState } from "react";
 
 export default function AddPetModal({
   setAddPetModal,
+  mutate,
 }: {
   setAddPetModal: (e: boolean) => void;
+  mutate: () => void;
 }) {
   const sharedState = useSharedState();
 
@@ -97,6 +99,7 @@ export default function AddPetModal({
 
     if (res.ok) {
       setAddPetModal(false);
+      mutate();
     } else {
       alert("Eroare la adaugare!");
     }

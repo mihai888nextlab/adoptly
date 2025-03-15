@@ -2,91 +2,30 @@ import AddPetModal from "@/components/modals/addPetModal";
 import { NextPageWithLayout } from "../_app";
 import { useState } from "react";
 import useSWR from "swr";
+import { Pet } from "@/lib/models/pet";
+import AnimalDataModal from "@/components/modals/animalDataModal";
+import Loading from "@/components/loading";
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 const Animale: NextPageWithLayout = () => {
-  const [selected, setSelected] = useState("");
+  const [selected, setSelected] = useState<Pet | null>(null);
   const [addPetModal, setAddPetModal] = useState(false);
 
-  const { data, isLoading, error } = useSWR("/api/getPetsByUploader", fetcher);
-
-  const data2 = [
-    {
-      nume: "Rex",
-      specie: "Caine",
-      rasa: "Ciobanesc German",
-      varsta: { ani: 2, luni: 3 },
-      gen: "Masculin",
-    },
-    {
-      nume: "Trex",
-      specie: "Caine",
-      rasa: "Ciobanesc German",
-      varsta: { ani: 2, luni: 3 },
-      gen: "Masculin",
-    },
-    {
-      nume: "Rex",
-      specie: "Caine",
-      rasa: "Ciobanesc German",
-      varsta: { ani: 2, luni: 3 },
-      gen: "Masculin",
-    },
-    {
-      nume: "Rex",
-      specie: "Caine",
-      rasa: "Ciobanesc German",
-      varsta: { ani: 2, luni: 3 },
-      gen: "Masculin",
-    },
-    {
-      nume: "Rex",
-      specie: "Caine",
-      rasa: "Ciobanesc German",
-      varsta: { ani: 2, luni: 3 },
-      gen: "Masculin",
-    },
-    {
-      nume: "Rex",
-      specie: "Caine",
-      rasa: "Ciobanesc German",
-      varsta: { ani: 2, luni: 3 },
-      gen: "Masculin",
-    },
-    {
-      nume: "Rex",
-      specie: "Caine",
-      rasa: "Ciobanesc German",
-      varsta: { ani: 2, luni: 3 },
-      gen: "Masculin",
-    },
-    {
-      nume: "Rex",
-      specie: "Caine",
-      rasa: "Ciobanesc German",
-      varsta: { ani: 2, luni: 3 },
-      gen: "Masculin",
-    },
-    {
-      nume: "Rex",
-      specie: "Caine",
-      rasa: "Ciobanesc German",
-      varsta: { ani: 2, luni: 3 },
-      gen: "Masculin",
-    },
-    {
-      nume: "Rex",
-      specie: "Caine",
-      rasa: "Ciobanesc German",
-      varsta: { ani: 2, luni: 3 },
-      gen: "Masculin",
-    },
-  ];
+  const { data, isLoading, error, mutate } = useSWR<Pet[]>(
+    "/api/getPetsByUploader",
+    fetcher
+  );
 
   return (
     <div className="w-full h-full">
-      {addPetModal && <AddPetModal setAddPetModal={setAddPetModal} />}
+      {addPetModal && (
+        <AddPetModal setAddPetModal={setAddPetModal} mutate={mutate} />
+      )}
+      {selected && (
+        <AnimalDataModal animal={selected} setAnimalDataModal={setSelected} />
+      )}
+      {isLoading && <Loading />}
       <div className="w-full h-full bg-white rounded-xl shadow-sm p-7">
         <div className="flex justify-between items-center mb-10">
           <h2 className="text-2xl font-semibold">Lista animale</h2>
@@ -117,23 +56,25 @@ const Animale: NextPageWithLayout = () => {
           </thead>
 
           <tbody>
-            {data.map((animal, i) => (
-              <tr
-                className={
-                  (i % 2 == 0 ? "bg-white" : "bg-gray-100") +
-                  " h-16 cursor-pointer hover:bg-gray-200"
-                }
-                key={animal.nume}
-              >
-                <td className="text-center">{animal.nume}</td>
-                <td className="text-center">{animal.specie}</td>
-                <td className="text-center">{animal.rasa}</td>
-                <td className="text-center">
-                  {animal.varsta.ani} ani si {animal.varsta.luni} luni
-                </td>
-                <td className="text-center">{animal.gen}</td>
-              </tr>
-            ))}
+            {data &&
+              data?.map((animal, i) => (
+                <tr
+                  className={
+                    (i % 2 == 0 ? "bg-white" : "bg-gray-100") +
+                    " h-16 cursor-pointer hover:bg-gray-200"
+                  }
+                  onClick={() => setSelected(animal)}
+                  key={animal.nume}
+                >
+                  <td className="text-center">{animal.nume}</td>
+                  <td className="text-center">{animal.specie}</td>
+                  <td className="text-center">{animal.rasa}</td>
+                  <td className="text-center">
+                    {animal.varsta.ani} ani si {animal.varsta.luni} luni
+                  </td>
+                  <td className="text-center">{animal.gen}</td>
+                </tr>
+              ))}
           </tbody>
         </table>
       </div>
