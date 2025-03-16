@@ -4,9 +4,9 @@ export default function Sidebar() {
   return (
     <div className="w-64 bg-gray-100 p-4">
       <h2 className="text-xl font-bold mb-4">H-care</h2>
-      <button className="bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded">
+      {/* <button className="bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded">
         Register patient
-      </button>
+      </button> */}
       <nav className="mt-4">
         <ul>
           <li className="mb-2">
