@@ -8,7 +8,7 @@ const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 const Evenimente: NextPageWithLayout = () => {
   const [selected, setSelected] = useState<Event | null>(null);
-  const [addPetModal, setAddPetModal] = useState(false);
+  const [addPetModal, setAddEventModal] = useState(false);
 
   const { data, isLoading, error, mutate } = useSWR<Event[]>(
     "/api/getEvents",
@@ -26,11 +26,10 @@ const Evenimente: NextPageWithLayout = () => {
       <table className="w-full mt-5">
         <thead className="text-gray-500 h-8 border-b-2 border-[#752CDF]">
           <tr>
-            <th>Nume</th>
-            <th>Specie</th>
-            <th>Rasa</th>
-            <th>Varsta</th>
-            <th>Gen</th>
+            <th>Data</th>
+            <th>Locatie</th>
+            <th>Interval Orar</th>
+            <th>Ultima Zi de Inscriere</th>
           </tr>
         </thead>
 
@@ -42,15 +41,19 @@ const Evenimente: NextPageWithLayout = () => {
                 " h-16 cursor-pointer hover:bg-gray-200"
               }
               onClick={() => setSelected(event)}
-              key={event.ora_inceput}
+              key={event.id}
             >
-              <td className="text-center">{event.ora_inceput}</td>
-              <td className="text-center">{event.ora_inceput}</td>
-              <td className="text-center">{event.ora_inceput}</td>
               <td className="text-center">
-                {event.ora_inceput}/{event.ora_sfarsit}/{event.ora_sfarsit}
+                {event.data?.an}/{event.data?.luna}/{event.data?.zi}
               </td>
-              <td className="text-center">{event.ora_inceput}</td>
+              <td className="text-center">{event.locatie}</td>
+              <td className="text-center">
+                {event.ora_inceput}-{event.ora_sfarsit}
+              </td>
+              <td className="text-center">
+                {event.ultima_zi?.an}/{event.ultima_zi?.luna}/
+                {event.ultima_zi?.zi}
+              </td>
             </tr>
           ))}
         </tbody>

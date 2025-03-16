@@ -108,13 +108,14 @@ export default function AddPetModal({
   return (
     <div className="absolute top-0 left-0 bottom-0 right-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-white p-10 rounded-xl shadow-sm w-1/2 h-[80%] overflow-y-auto">
-      <button className="bg-red-500 p-2  pd-2 text-white hover:bg-red-900 hover:rounded-xl"
-        onClick={()=>{
-          setAddPetModal(false);
-        }}
+        <button
+          className="bg-red-500 p-2  pd-2 text-white hover:bg-red-900 hover:rounded-xl"
+          onClick={() => {
+            setAddPetModal(false);
+          }}
         >
-        Abort
-      </button>
+          Abort
+        </button>
         <h1 className="font-bold m-0 mb-2">Adauga un animal</h1>
         <h2 className="font-semibold text-xl">Informatii generale</h2>
         <form className="flex flex-col gap-4 mt-4" onSubmit={handleFormSubmit}>
@@ -245,6 +246,12 @@ export default function AddPetModal({
 
           <button className="bg-blue-500 text-white rounded-lg p-5 mt-4">
             Adauga
+          </button>
+          <button
+            className="p-3 bg-red-500 rounded-lg text-white"
+            onClick={() => setAddPetModal(false)}
+          >
+            Close
           </button>
         </form>
       </div>
