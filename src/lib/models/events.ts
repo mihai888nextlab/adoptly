@@ -9,6 +9,7 @@ export interface Event extends Document {
   link: string;
   image: string;
   shelter: string;
+  addedBy: string;
 }
 const EventsSchema = new Schema<Event>({
   date: { type: { an: Number, luna: Number, zi: Number }, required: true },
@@ -21,6 +22,7 @@ const EventsSchema = new Schema<Event>({
   },
   link: { type: String, required: true },
   image: { type: String, required: true },
+  addedBy: { type: String, required: true },
   shelter: { type: String, required: true },
 });
 

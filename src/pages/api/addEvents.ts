@@ -20,6 +20,7 @@ export default async function handler(
     link_program,
     imageUrl,
     shelter,
+    addedBy,
   } = req.body;
 
   if (req.method !== "POST") {
@@ -38,7 +39,8 @@ export default async function handler(
     !ultima_zi ||
     !link_program ||
     !imageUrl ||
-    !shelter
+    !shelter ||
+    !addedBy
   ) {
     return res
       .status(400)
@@ -56,8 +58,11 @@ export default async function handler(
       ultima_zi: { an: ultima_zi_an, luna: ultima_zi_luna, zi: ultima_zi },
       link_program,
       shelter,
+      addedBy,
       image: imageUrl,
     });
+
+    await event.save();
 
     return res.status(200).json({ message: "Eveniment adăugat cu succes" });
   } catch (error) {

@@ -9,11 +9,15 @@ import { FaDog } from "react-icons/fa";
 import { IoSearch } from "react-icons/io5";
 import { useRouter } from "next/router";
 import { Playwrite_HU, Poppins } from "next/font/google";
+import { Event } from "@/lib/models/events";
+import AddEventModal from "./modals/addEventModal";
+import { useState } from "react";
 
 const font = Playwrite_HU({});
 const font2 = Poppins({ weight: "400", subsets: ["latin"] });
 
 export default function AppLayout({ children }: { children: ReactNode }) {
+  const [addEventModal, setAddEventModal] = useState(false);
   const sharedState = useSharedState();
   const router = useRouter();
 
@@ -59,9 +63,14 @@ export default function AppLayout({ children }: { children: ReactNode }) {
         <main className={font2.className + " w-full grid grid-cols-[20%_80%]"}>
           <menu className="z-20 flex flex-col items-center">
             <div className="w-[80%]">
-              {/* <button className="bg-[#752CDF] w-full my-10 py-5 rounded-xl text-white font-semibold flex items-center justify-center">
-                <FaPlus className="mr-5" /> Adauga un animal
-              </button> */}
+              <button
+                className="bg-[#752CDF] w-full my-10 py-5 rounded-xl text-white font-semibold flex items-center justify-center"
+                onClick={() => setAddEventModal(true)}
+              >
+                {" "}
+                <FaPlus className="mr-5" />
+                Adauga un eveniment
+              </button>
               {menu.map((item) => (
                 <div
                   key={item.name}
@@ -88,6 +97,10 @@ export default function AppLayout({ children }: { children: ReactNode }) {
           <div className="bg-[#F5F6FA] p-10">{children}</div>
         </main>
       </div>
+
+      {addEventModal && (
+        <AddEventModal setAddEventModal={setAddEventModal} mutate={() => {}} />
+      )}
     </>
   );
 }
