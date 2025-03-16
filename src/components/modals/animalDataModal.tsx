@@ -1,4 +1,6 @@
 import { Pet } from "@/lib/models/pet";
+import axios from "axios";
+import { toast } from "react-toastify";
 
 export default function AnimalDataModal({
   animal,
@@ -7,6 +9,41 @@ export default function AnimalDataModal({
   animal: Pet | null;
   setAnimalDataModal: (e: Pet | null) => void;
 }) {
+
+
+  const handleDelete = async () => {
+  try {
+    const response = await axios.post("/api/delete", { id: animal?._id });
+    if (response.status === 200) {
+      toast.success("Animal deleted successfully");
+      setAnimalDataModal(null);
+      // Consider refreshing the data list here
+    } else {
+      throw new Error("Failed to delete animal");
+    }
+  } catch (error) {
+    console.error("Error deleting animal:", error);
+    toast.error("Failed to delete animal. Please try again.");
+  }
+};
+
+const handleAvailabilityToggle = async () => {
+  try {
+    const response = await axios.post("/api/updatePetNo", { id: animal?._id });
+    if (response.status === 200) {
+      toast.success("Availability updated successfully");
+      setAnimalDataModal(null);
+      // Consider refreshing the data list here
+    } else {
+      throw new Error("Failed to update availability");
+    }
+  } catch (error) {
+    console.error("Error updating availability:", error);
+    toast.error("Failed to update availability. Please try again.");
+  }
+};
+
+
   return (
     <div className="absolute top-0 left-0 bottom-0 right-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-white p-10 rounded-xl shadow-sm w-1/2 h-[80%] overflow-y-auto">
@@ -25,8 +62,7 @@ export default function AnimalDataModal({
               <span className="font-semibold">Rasa:</span> {animal?.rasa}
             </p>
             <p>
-              <span className="font-semibold">Varsta:</span>{" "}
-              {animal?.varsta.ani} ani {animal?.varsta.luni} luni
+              <span className="font-semibold">Varsta:</span> {animal?.varsta.ani} ani {animal?.varsta.luni} luni
             </p>
             <p>
               <span className="font-semibold">Gen:</span> {animal?.gen}
@@ -35,27 +71,22 @@ export default function AnimalDataModal({
           <div>
             <h2 className="font-semibold text-2xl mb-5">Detalii</h2>
             <p>
-              <span className="font-semibold">Greutate:</span>{" "}
-              {animal?.greutate} kg
+              <span className="font-semibold">Greutate:</span> {animal?.greutate} kg
             </p>
             <p>
               <span className="font-semibold">Culoare:</span> {animal?.culoare}
             </p>
             <p>
-              <span className="font-semibold">Data salvarii:</span>{" "}
-              {animal?.dataSalvarii}
+              <span className="font-semibold">Data salvarii:</span> {animal?.dataSalvarii}
             </p>
             <p>
-              <span className="font-semibold">Stare de sanatate:</span>{" "}
-              {animal?.stareDeSanatate}
+              <span className="font-semibold">Stare de sanatate:</span> {animal?.stareDeSanatate}
             </p>
             <p>
-              <span className="font-semibold">Sterilizat:</span>{" "}
-              {animal?.sterilizat}
+              <span className="font-semibold">Sterilizat:</span> {animal?.sterilizat}
             </p>
             <p>
-              <span className="font-semibold">Disponibil pentru adopție:</span>{" "}
-              {animal?.disponibil}
+              <span className="font-semibold">Disponibil pentru adopție:</span> {animal?.disponibil}
             </p>
             <p>
               <span className="font-semibold">Descriere: </span>
@@ -70,16 +101,16 @@ export default function AnimalDataModal({
           Close
         </button>
         <button
-          className="p-3 bg-red-500 rounded-lg text-white"
-          onClick={() => setAnimalDataModal(null)}
+          className="p-3 bg-red-500 rounded-lg text-white ml-2"
+          onClick={handleDelete}
         >
           Delete
         </button>
         <button
-          className="p-3 bg-blue-500 rounded-lg text-white"
-          onClick={() => setAnimalDataModal(null)}
+          className="p-3 bg-blue-500 rounded-lg text-white ml-2"
+          onClick={handleAvailabilityToggle}
         >
-          Schimba la diponibil
+          Schimba la disponibil
         </button>
       </div>
     </div>

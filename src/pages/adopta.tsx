@@ -30,15 +30,18 @@ export default function AdoptaPage() {
         fetch('/api/getPet')
             .then(response => {
                 if (!response.ok) {
-                    throw new Error('Network response was not ok');
+                    return response.json().then((err) => {
+                        throw new Error(`Error: ${response.status} - ${err.message || 'Unknown error'}`);
+                    });
                 }
                 return response.json();
             })
             .then(data => setPets(data))
             .catch(error => {
-                console.error('Error fetching pets:', error);
+                console.error('Error fetching pets:', error.message);
             });
     }, []);
+    
 
     const filteredPets = searchTerm
         ? pets.filter((pet) =>

@@ -9,6 +9,7 @@ export interface Event extends Document {
   image: string;
   shelter: string;
   addedBy: string;
+  _id: string;
 }
 const EventsSchema = new Schema<Event>({
   data: { type: { an: Number, luna: Number, zi: Number }, required: true },

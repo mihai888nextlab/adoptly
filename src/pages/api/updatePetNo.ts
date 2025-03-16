@@ -24,7 +24,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         // Update the pet's 'disponibil' field to 'In process de adoptie'
         const updatedPet = await Pet.findByIdAndUpdate(
             petId,
-            { $set: { disponibil: "Disponibil" } },
+            { $set: { disponibil: "Liber pentru adoptie" } },
             { new: true } // Return the updated document
         );
 

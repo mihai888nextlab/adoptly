@@ -5,6 +5,9 @@ import Footer from "@/components/footer";
 import Sidebar from "./sidebar";
 import FancyButton from "@/components/fancyButton";
 import ClickedPet from "@/components/clickedPet";
+import dayjs from "dayjs";
+import Loading from "@/components/loading";
+
 
 interface Shelter {
   _id: string;
@@ -32,6 +35,21 @@ interface Pet {
   image: string;
 }
 
+interface Evenimente {
+  data_an: number;
+  data_luna: number;
+  data_zi: number;
+  ora_inceput: string;
+  ora_sfarsit: string;
+  locatie: string;
+  ultima_zi_an: number;
+  ultima_zi_luna: number;
+  ultima_zi: number;
+  imageUrl: string;
+  addedBy: string;
+  shelter: string;
+}
+
 export default function OngDetails() {
   const router = useRouter();
   const { id } = router.query;
@@ -42,6 +60,19 @@ export default function OngDetails() {
   const [pets, setPets] = useState<Pet[]>([]);
   const [selectedPet, setSelectedPet] = useState<Pet | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [events, setEvenimente] = useState<Evenimente[]>([]);
+  
+  useEffect(() => {
+    fetch("/api/getEvents")
+      .then(response => response.text()) // Inspect response
+      .then(text => {
+        console.log("Raw response:", text); // Check if it's HTML or JSON
+        return JSON.parse(text); // Parse the JSON if valid
+      })
+      .then((data: Evenimente[]) => setEvenimente(data))
+      .catch((error) => console.error("Error fetching events:", error));
+  }, []);
+  
 
   useEffect(() => {
     fetch("/api/getShelters")
@@ -123,10 +154,52 @@ export default function OngDetails() {
           )}
 
           {selectedFunctionality === "evenimente" && (
-            <div className="mt-6 p-4 bg-gray-100 rounded-lg">
-              <h2 className="text-2xl font-semibold">Evenimente Information</h2>
-              <p>Empty for now</p>
-            </div>
+            <div className="overflow-x-auto bg-white shadow-lg rounded-xl p-4">
+                      <table className="w-full border-collapse">
+                        <thead>
+                          <tr className="bg-[#752CDF] text-white text-lg h-12">
+                            <th className="p-3">Data</th>
+                            <th className="p-3">Locație</th>
+                            <th className="p-3">Interval Orar</th>
+                            <th className="p-3">Ultima Zi de Înscriere</th>
+                          </tr>
+                        </thead>
+            
+                        <tbody>
+                          {events.length === 0  ? (
+                            <tr>
+                              <td colSpan={4} className="text-center py-5 text-gray-500">
+                                Nu există evenimente disponibile.
+                              </td>
+                            </tr>
+                          ) : (
+                            events.map((event, i) => (
+                              <tr
+                                className={`h-14 cursor-pointer ${
+                                  i % 2 === 0 ? "bg-gray-50" : "bg-white"
+                                } hover:bg-gray-200 transition-all duration-200`}
+                                
+                              >
+                                <td className="text-center font-medium">
+                                  {dayjs(
+                                    `${event.data_an}-${event.data_luna}-${event.data_zi}`
+                                  ).format("DD MMM YYYY")}
+                                </td>
+                                <td className="text-center">{event.locatie}</td>
+                                <td className="text-center">
+                                  {event.ora_inceput} - {event.ora_sfarsit}
+                                </td>
+                                <td className="text-center text-red-500 font-medium">
+                                  {dayjs(
+                                    `${event.ultima_zi_an}-${event.ultima_zi_luna}-${event.ultima_zi?.zi}`
+                                  ).format("DD MMM YYYY")}
+                                </td>
+                              </tr>
+                            ))
+                          )}
+                        </tbody>
+                      </table>
+                    </div>
           )}
 
           {selectedFunctionality === null && (
