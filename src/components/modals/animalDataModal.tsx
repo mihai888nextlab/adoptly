@@ -1,5 +1,6 @@
 import { Pet } from "@/lib/models/pet";
 
+
 export default function AnimalDataModal({
   animal,
   setAnimalDataModal,
@@ -73,7 +74,13 @@ export default function AnimalDataModal({
           className="p-3 bg-red-500 rounded-lg text-white"
           onClick={() => setAnimalDataModal(null)}
         >
-          Close
+          Delete
+        </button>
+        <button
+          className="p-3 bg-blue-500 rounded-lg text-white"
+          onClick={() => setAnimalDataModal(null)}
+        >
+          Schimba la diponibil
         </button>
       </div>
     </div>

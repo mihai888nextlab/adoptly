@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import ClickedPet from "@/components/clickedPet"; // Import the popup component
 
 interface Pet {
+    _id: string; 
     nume: string;
     specie: string;
     rasa: string;

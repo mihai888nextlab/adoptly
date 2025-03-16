@@ -15,6 +15,7 @@ interface Shelter {
 }
 
 interface Pet {
+  _id: string;  
   nume: string;
   specie: string;
   rasa: string;
