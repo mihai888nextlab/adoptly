@@ -1,6 +1,8 @@
 import { useState } from "react";
 import FancyButton from "@/components/fancyButton";
+import MakeAReservationModal from "@/components/modals/makeAResarvation"; 
 import { Pet } from "@/lib/models/pet";
+
 interface Petl {
     _id: string;
     nume: string;
@@ -21,112 +23,79 @@ interface Petl {
 
 interface ClickedPetProps {
     pet: Petl;
-    onClose: () => void; // Function to close the popup
+    onClose: () => void;
 }
 
 const ClickedPet: React.FC<ClickedPetProps> = ({ pet, onClose }) => {
     const [disponibil, setDisponibil] = useState(pet.disponibil);
+    const [showReservationModal, setShowReservationModal] = useState(false);
 
-    // Function to handle the appointment button click
-    const handleMakeAppointment = async () => {
-        try {
-            // Update the state locally
-            setDisponibil("In process de adoptie");
-
-            // Send the request to update the pet's status in the database
-            const response = await fetch('/api/updatePetDisponibil', {
-                method: 'PATCH',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    petId: pet._id,
-                    disponibil: "In process de adoptie",
-                
-                }),
-            });
-
-            const result = await response.json();
-
-            if (response.ok) {
-                console.log("Pet status updated successfully:", result);
-            } else {
-                console.error("Failed to update pet status:", result.message);
-                // Optionally revert the local state if the update fails
-                setDisponibil(pet.disponibil);
-            }
-        } catch (error) {
-            console.error("Error updating pet status:", error);
-            // Optionally revert the local state if the update fails
-            setDisponibil(pet.disponibil);
-        }
+    const handleMakeAppointment = () => {
+        setShowReservationModal(true);  
     };
 
     return (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-            <div className="bg-white rounded-lg w-11/12 md:w-3/4 lg:w-1/2 p-8 shadow-lg relative overflow-hidden">
-                {/* Close button */}
-                <button
-                    onClick={onClose}
-                    className="absolute top-4 right-4 p-2 rounded-full bg-red-500 text-white text-2xl hover:bg-red-600 transition duration-300"
-                >
-                    ×
-                </button>
+        <>
+            <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+                <div className="bg-white rounded-lg w-11/12 md:w-3/4 lg:w-1/2 p-8 shadow-lg relative overflow-hidden">
+                    
 
-                {/* Pet details */}
-                <div className="flex flex-col lg:flex-row items-start space-y-6 lg:space-y-0 lg:space-x-6">
-                    {/* Image Section */}
-                    <div className="flex-shrink-0">
-                        <img
-                            src={pet.image}
-                            alt={pet.nume}
-                            className="w-56 h-56 object-cover rounded-lg shadow-md"
-                        />
-                    </div>
-
-                    {/* General Info and Details Section */}
-                    <div className="flex-1 space-y-4 text-left">
-                        <div className="flex justify-between items-start">
-                            {/* General Info on Left */}
-                            <div className="space-y-2">
-                                <p className="text-xl font-semibold text-gray-800">{pet.nume}</p>
-                                <p className="text-lg text-gray-700"><strong>Specie:</strong> {pet.specie}</p>
-                                <p className="text-lg text-gray-700"><strong>Rasa:</strong> {pet.rasa}</p>
-                                <p className="text-lg text-gray-700"><strong>Vârsta:</strong> {pet.varsta.ani} ani, {pet.varsta.luni} luni</p>
-                                <p className="text-lg text-gray-700"><strong>Gen:</strong> {pet.gen}</p>
-                            </div>
-
-                            {/* Pet Details on Right */}
-                            <div className="space-y-2">
-                                <p className="text-lg text-gray-700"><strong>Greutate:</strong> {pet.greutate} kg</p>
-                                <p className="text-lg text-gray-700"><strong>Culoare:</strong> {pet.culoare}</p>
-                                <p className="text-lg text-gray-700"><strong>Data Salvării:</strong> {pet.dataSalvarii}</p>
-                                <p className="text-lg text-gray-700"><strong>Stare de sănătate:</strong> {pet.stareDeSanatate}</p>
-                                <p className="text-lg text-gray-700"><strong>Sterilizat:</strong> {pet.sterilizat}</p>
-                                <p className="text-lg text-gray-700"><strong>Disponibil pentru adopție:</strong> {disponibil}</p>
-                            </div>
+                    <div className="flex flex-col lg:flex-row items-start space-y-6 lg:space-y-0 lg:space-x-6">
+                        <div className="flex-shrink-0">
+                            <img
+                                src={pet.image}
+                                alt={pet.nume}
+                                className="w-56 h-56 object-cover rounded-lg shadow-md"
+                            />
                         </div>
 
-                        {/* Description */}
-                        <p className="text-lg text-gray-700 mb-4"><strong>Descriere:</strong> {pet.descriere}</p>
+                        <div className="flex-1 space-y-4 text-left">
+                            <div className="flex justify-between items-start">
+                                <div className="space-y-2">
+                                    <p className="text-xl font-semibold text-gray-800">{pet.nume}</p>
+                                    <p className="text-lg text-gray-700"><strong>Specie:</strong> {pet.specie}</p>
+                                    <p className="text-lg text-gray-700"><strong>Rasa:</strong> {pet.rasa}</p>
+                                    <p className="text-lg text-gray-700"><strong>Vârsta:</strong> {pet.varsta.ani} ani, {pet.varsta.luni} luni</p>
+                                    <p className="text-lg text-gray-700"><strong>Gen:</strong> {pet.gen}</p>
+                                </div>
 
-                        {/* Buttons */}
-                        <div className="flex justify-between space-x-4">
-                            <button
-                                onClick={onClose}
-                                className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition duration-300"
-                            >
-                                Închide
-                            </button>
-                            <FancyButton
-                                text="Programează o întâlnire"
-                                onClick={handleMakeAppointment}
-                            />
+                                <div className="space-y-2">
+                                    <p className="text-lg text-gray-700"><strong>Greutate:</strong> {pet.greutate} kg</p>
+                                    <p className="text-lg text-gray-700"><strong>Culoare:</strong> {pet.culoare}</p>
+                                    <p className="text-lg text-gray-700"><strong>Data Salvării:</strong> {pet.dataSalvarii}</p>
+                                    <p className="text-lg text-gray-700"><strong>Stare de sănătate:</strong> {pet.stareDeSanatate}</p>
+                                    <p className="text-lg text-gray-700"><strong>Sterilizat:</strong> {pet.sterilizat}</p>
+                                    <p className="text-lg text-gray-700"><strong>Disponibil pentru adopție:</strong> {disponibil}</p>
+                                </div>
+                            </div>
+
+                            <p className="text-lg text-gray-700 mb-4"><strong>Descriere:</strong> {pet.descriere}</p>
+
+                            <div className="flex justify-between space-x-4">
+                                <button
+                                    onClick={onClose}
+                                    className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition duration-300"
+                                >
+                                    Închide
+                                </button>
+                                <FancyButton
+                                    text="Programează o întâlnire"
+                                    onClick={handleMakeAppointment}
+                                />
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+
+            {/* Reservation Modal */}
+            {showReservationModal && (
+                <MakeAReservationModal
+                    petName={pet.nume}
+                    onClose={() => setShowReservationModal(false)}
+                />
+            )}
+        </>
     );
 };
 

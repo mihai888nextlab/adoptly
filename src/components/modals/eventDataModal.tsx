@@ -15,12 +15,11 @@ interface Event {
 
 export default function EventDataModal({
   event,
-  onClose, // Changed from setEventDataModal to onClose
+  onClose,
 }: {
   event: Event | null;
-  onClose: () => void; // New prop for closing modal
+  onClose: () => void;
 }) {
-  
   const formatDate = (dateObj?: { an: number; luna: number; zi: number }) => {
     if (!dateObj) return "N/A";
     return dayjs(`${dateObj.an}-${dateObj.luna}-${dateObj.zi}`).format("DD/MM/YYYY");
@@ -40,7 +39,7 @@ export default function EventDataModal({
       const response = await axios.post("/api/deleteEvent", { id: event._id });
       if (response.status === 200) {
         toast.success("Event deleted successfully");
-        onClose(); // Close modal after success
+        onClose();
       } else {
         throw new Error("Failed to delete event");
       }
@@ -56,7 +55,7 @@ export default function EventDataModal({
       const response = await axios.post("/api/updateEventStatus", { id: event._id });
       if (response.status === 200) {
         toast.success("Event status updated successfully");
-        onClose(); // Close modal after success
+        onClose();
       } else {
         throw new Error("Failed to update event status");
       }
@@ -67,8 +66,14 @@ export default function EventDataModal({
   };
 
   return (
-    <div className="absolute top-0 left-0 bottom-0 right-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white p-10 rounded-xl shadow-sm w-1/2 h-[80%] overflow-y-auto">
+    <div
+      className="absolute top-0 left-0 bottom-0 right-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+      onClick={onClose} // Clicking outside closes the modal
+    >
+      <div
+        className="bg-white p-10 rounded-xl shadow-sm w-1/2 h-[80%] overflow-y-auto"
+        onClick={(e) => e.stopPropagation()} // Prevent content clicks from closing the modal
+      >
         <h1 className="m-0 text-center">{event?.shelter || "Unknown Shelter"}</h1>
         <div
           className="w-[40%] h-96 rounded-lg bg-cover bg-center m-auto mt-5"
@@ -96,10 +101,9 @@ export default function EventDataModal({
         </div>
 
         <div className="flex gap-3 mt-5">
-         
           <button
             className="p-3 bg-gray-500 rounded-lg text-white"
-            onClick={onClose} // Updated for consistency
+            onClick={onClose}
           >
             Close
           </button>

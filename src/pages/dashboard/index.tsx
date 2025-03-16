@@ -24,6 +24,10 @@ const Dashboard: NextPageWithLayout = () => {
     fetch("/api/getPetsByUploader")
       .then((response) => {
         if (!response.ok) {
+          if (response.status === 404) {
+            // Instead of throwing an error, resolve with an empty array
+            return [];
+          }
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
         return response.json();
@@ -37,6 +41,8 @@ const Dashboard: NextPageWithLayout = () => {
         setError("Failed to load animals.");
       });
   }, []);
+  
+  
 
   return (
     <div>
@@ -44,10 +50,8 @@ const Dashboard: NextPageWithLayout = () => {
         <h1 className="font-bold m-0">{animals.length}</h1>
         <p className="text-gray-500 font-bold text-xl m-0">Total animals</p>
       </div>
-
       {error && <p className="text-red-500">{error}</p>}
-
-      <h1>{sharedState.user ? sharedState.user.name : "Guest"}</h1>
+      <h1>{sharedState?.user?.name ?? "Guest"}</h1>
     </div>
   );
 };
