@@ -39,7 +39,8 @@ export default function AppLayout({ children }: { children: ReactNode }) {
   const menu = [
     { name: "Dashboard", path: "/dashboard", icon: MdDashboard },
     { name: "Animale", path: "/dashboard/animale", icon: FaDog },
-    { name: "Settings", path: "/app/settings", icon: IoIosSettings },
+    // { name: "Settings", path: "/app/settings", icon: IoIosSettings },
+    { name: "Evenimente", path: "./evenimente", icon: IoIosSettings },
   ];
 
   return (

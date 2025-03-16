@@ -222,6 +222,12 @@ export default function AddEventModal({
           <button className="bg-blue-500 text-white rounded-lg p-5 mt-4">
             Adauga
           </button>
+          <button
+            className="p-3 bg-red-500 rounded-lg text-white"
+            onClick={() => setAddEventModal(false)}
+          >
+            Close
+          </button>
         </form>
       </div>
     </div>
