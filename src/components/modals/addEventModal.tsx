@@ -73,7 +73,7 @@ export default function AddEventModal({
     const imageUrl = formData.get("image") as string;
     const shelter = formData.get("shelter") as string;
 
-    const res = await fetch("/api/addPet", {
+    const res = await fetch("/api/addEvent", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({

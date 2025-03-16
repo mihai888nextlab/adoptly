@@ -1,20 +1,35 @@
 import { StateProvider, useSharedState } from "@/hooks/stateContext";
-import { ReactNode } from "react";
+import { ReactNode, useState } from "react";
 import Loading from "./loading";
 import { MdDashboard } from "react-icons/md";
-import { FaUserShield } from "react-icons/fa";
+import { FaUserShield, FaPlus, FaDog } from "react-icons/fa";
 import { IoIosSettings } from "react-icons/io";
-import { FaPlus } from "react-icons/fa";
-import { FaDog } from "react-icons/fa";
 import { IoSearch } from "react-icons/io5";
 import { useRouter } from "next/router";
 import { Playwrite_HU, Poppins } from "next/font/google";
 import { Event } from "@/lib/models/events";
 import AddEventModal from "./modals/addEventModal";
-import { useState } from "react";
+import useSWR from "swr";
+import { NextPageWithLayout } from "@/pages/_app";
 
 const font = Playwrite_HU({});
 const font2 = Poppins({ weight: "400", subsets: ["latin"] });
+const fetcher = (url: string) => fetch(url).then((res) => res.json());
+
+const Eveniment: NextPageWithLayout = () => {
+  const [selected, setSelected] = useState<Event | null>(null);
+  const [addPetModal, setAddPetModal] = useState(false);
+
+  const { data, isLoading, error, mutate } = useSWR<Event[]>(
+    "/api/getEventsByUploader",
+    fetcher
+  );
+
+  const pets = Array.isArray(data) ? data : [];
+  console.log("Fetched Data:", data);
+
+  return null; // Placeholder to prevent an empty component error
+};
 
 export default function AppLayout({ children }: { children: ReactNode }) {
   const [addEventModal, setAddEventModal] = useState(false);
@@ -30,6 +45,9 @@ export default function AppLayout({ children }: { children: ReactNode }) {
   return (
     <>
       {sharedState.loading && <Loading />}
+      {addEventModal && (
+        <AddEventModal setAddEventModal={setAddEventModal} mutate={() => {}} />
+      )}
       <div className="w-full min-h-screen grid grid-rows-[5rem_1fr]">
         <header className="h-20 w-full z-10 flex">
           <div className="h-full flex items-center justify-center cursor-pointer w-[20%]">
@@ -67,7 +85,6 @@ export default function AppLayout({ children }: { children: ReactNode }) {
                 className="bg-[#752CDF] w-full my-10 py-5 rounded-xl text-white font-semibold flex items-center justify-center"
                 onClick={() => setAddEventModal(true)}
               >
-                {" "}
                 <FaPlus className="mr-5" />
                 Adauga un eveniment
               </button>
@@ -93,14 +110,9 @@ export default function AppLayout({ children }: { children: ReactNode }) {
               ))}
             </div>
           </menu>
-
           <div className="bg-[#F5F6FA] p-10">{children}</div>
         </main>
       </div>
-
-      {addEventModal && (
-        <AddEventModal setAddEventModal={setAddEventModal} mutate={() => {}} />
-      )}
     </>
   );
 }

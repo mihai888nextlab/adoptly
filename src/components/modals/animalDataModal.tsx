@@ -1,6 +1,5 @@
 import { Pet } from "@/lib/models/pet";
 
-
 export default function AnimalDataModal({
   animal,
   setAnimalDataModal,

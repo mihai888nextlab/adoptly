@@ -17,10 +17,9 @@ export default async function handler(
     ultima_zi_an,
     ultima_zi_luna,
     ultima_zi,
-    link_program,
     imageUrl,
-    shelter,
     addedBy,
+    shelter,
   } = req.body;
 
   if (req.method !== "POST") {
@@ -37,10 +36,9 @@ export default async function handler(
     !ultima_zi_an ||
     !ultima_zi_luna ||
     !ultima_zi ||
-    !link_program ||
     !imageUrl ||
-    !shelter ||
-    !addedBy
+    !addedBy ||
+    !shelter
   ) {
     return res
       .status(400)
@@ -56,7 +54,6 @@ export default async function handler(
       ora_sfarsit,
       locatie,
       ultima_zi: { an: ultima_zi_an, luna: ultima_zi_luna, zi: ultima_zi },
-      link_program,
       shelter,
       addedBy,
       image: imageUrl,
